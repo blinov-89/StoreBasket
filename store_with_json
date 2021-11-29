@@ -1,0 +1,77 @@
+import json
+
+with open('sneakers.txt') as json_file:
+    data = json.load(json_file)
+
+sneakers = {}
+
+class Sneaker:
+    def __init__(self, name, count,creater, price, size):
+        self.name = name
+        self.count = count
+        self.creater = creater
+        self.price = price
+        self.size = size
+
+    def __str__(self):
+        return self.name + ' ' + str(self.count) + ' ' + self.creater + ' ' + str(self.price) + ' ' + str(self.size)
+
+    def __repr__(self):
+        return self.__str__()
+
+
+class SneakersList:
+    sneakers = {}
+
+    def check_contains(self, sneaker):
+        name = sneaker.name
+        return name in sneakers and sneakers[name].creater == sneaker.creater and sneakers[name].size == sneaker.size
+
+    def add_sneakers(self, name, count,creater, price, size):
+        sneaker = Sneaker(name, count, creater, price, size)
+        if self.check_contains(sneaker):
+            sneakers[name].count += count
+        sneakers[name] = sneaker
+
+    def del_sneakers(self, name):
+        sneakers.pop(name)
+
+    def add_sneaker_from_file(self):
+        file = open('sneakers.txt', 'r')
+        print(file.read())
+
+    def get_all_sneakers(self):
+        for keys in sneakers:
+            print(sneakers[keys].to_string)
+
+sneakers_list = SneakersList()
+command_list = ['1', '2', '3', '4', '5']
+command = None
+while command != 'exit':
+    print('1 - add sneaker')
+    print('2 - print all sneakers')
+    print('3 - add from file')
+    print('4 - show statistic')
+    print('5 - show all sneakers')
+    print('exit - exit')
+    command = input('Input command number')
+    if command == '1':
+        name = input('Input name')
+        count = int(input('Input number'))
+        creater = input('Input creator')
+        price = input('Input price')
+        size = input('Input size')
+        sneakers_list.add_sneakers(name, count, creater, price, size)
+    print()
+
+
+
+
+with open('sneakers-output.txt', 'w') as outfile:
+    data = []
+    for sneakers_name in sneakers_list.sneakers:
+        sneakers_value = sneakers_list.sneakers[sneakers_name]
+        sneakers = {}
+        data.append()
+
+    json.dump(data, outfile)
