@@ -1,0 +1,81 @@
+import sqlite3 as sl
+
+con = sl.connect('my-test.db')
+
+with con:
+    con.execute("""
+        DROP TABLE SNEAKERS1
+    """)
+
+with con:
+    con.execute("""
+        CREATE TABLE SNEAKERS1 (
+            id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+            name TEXT,
+            count INTEGER,
+            manufacture TEXT,
+            price FLOAT,
+            size FLOAT
+        );
+    """)
+
+id=1
+
+while True:
+    print('Что хотите сделать?\n'
+          '1 - добавление\n'
+          '2 - отображение всего\n'
+          '3 - удалить позицию\n'
+          '4 - статистика по позициям\n')
+    command = input()
+    if command == '1':
+        print('Введите название кроссовок:')
+        Name = input()
+        print('Введите кол-во кроссовок:')
+        Count = int(input())
+        print('Введите производителя:')
+        Manufacture = input()
+        print('Введите цену:')
+        Price = float(input())
+        print('Введите размер:')
+        Size = float(input())
+
+        sql = 'INSERT INTO SNEAKERS1 (id, name, count, manufacture, price, size) values(?, ?, ?, ?, ?, ?)'
+        data = [
+            (id, Name, Count, Manufacture, Price, Size)
+        ]
+
+        with con:
+            con.executemany(sql, data)
+
+        with con:
+            data = con.execute("SELECT * FROM SNEAKERS1")
+            for row in data:
+                print(row)
+
+        with con:
+            data = con.execute("SELECT id FROM SNEAKERS1")
+            for row in data:
+                id=row[0]
+
+        id=id+1
+        print(id)
+
+    elif command == '2':
+        with con:
+            data = con.execute("SELECT * FROM SNEAKERS1")
+            for row in data:
+                print(row)
+
+    elif command == '3':
+        print('Введите id для удаления:')
+        mee = input()
+        str="DELETE FROM SNEAKERS1 WHERE ID="+mee
+        with con:
+            data = con.execute(str)
+
+    elif command == '4':
+        with con:
+            data = con.execute("SELECT COUNT(id) FROM SNEAKERS1")
+            for row in data:
+                print(row[0])
